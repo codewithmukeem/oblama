@@ -1,45 +1,55 @@
-# [Project name]
+# Oblama
 
-_Replace the heading above with the project's name, and this line with one sentence describing what this app does for users._
+Oblama is a privacy-first Expo mobile app for downloading and chatting with open local AI models on Android and iOS.
 
 ## Run & Operate
 
-- `pnpm --filter @workspace/api-server run dev` — run the API server (port 5000)
-- `pnpm run typecheck` — full typecheck across all packages
-- `pnpm run build` — typecheck + build all packages
-- `pnpm --filter @workspace/api-spec run codegen` — regenerate API hooks and Zod schemas from the OpenAPI spec
-- `pnpm --filter @workspace/db run push` — push DB schema changes (dev only)
-- Required env: `DATABASE_URL` — Postgres connection string
+- `pnpm install` — install the workspace dependencies
+- `pnpm --filter @workspace/oblama run dev` — start the Expo preview
+- `pnpm --filter @workspace/oblama run typecheck` — check the mobile app
+- `pnpm run typecheck` — check every workspace package
+- `pnpm run build` — check and build every workspace package
+
+The Expo preview uses the configured `artifacts/oblama: expo` workflow. The app does not require a backend or database.
 
 ## Stack
 
 - pnpm workspaces, Node.js 24, TypeScript 5.9
-- API: Express 5
-- DB: PostgreSQL + Drizzle ORM
-- Validation: Zod (`zod/v4`), `drizzle-zod`
-- API codegen: Orval (from OpenAPI spec)
-- Build: esbuild (CJS bundle)
+- Expo SDK 54, Expo Router, React Native 0.81
+- Zustand + AsyncStorage for local state
+- llama.cpp native bridge (`OblamaLlama`) for on-device chat
+- Hugging Face Hub for optional model discovery and downloads
 
 ## Where things live
 
-_Populate as you build — short repo map plus pointers to the source-of-truth file for DB schema, API contracts, theme files, etc._
+- `artifacts/oblama/app/` — Expo Router screens
+- `artifacts/oblama/components/` — reusable mobile UI
+- `artifacts/oblama/src/store/appStore.ts` — persisted local state
+- `artifacts/oblama/src/services/` — model storage, downloads, Hugging Face access, and notifications
+- `artifacts/oblama/src/engines/llmEngine.ts` — native runtime boundary
+- `artifacts/oblama/src/config/modelsCatalog.ts` — curated starter model catalog
 
 ## Architecture decisions
 
-_Populate as you build — non-obvious choices a reader couldn't infer from the code (3-5 bullets)._
+- Model files and conversations stay on-device; there is no application server in the chat path.
+- Expo Go/web preview can inspect the UI, but native local inference requires a development or release build containing `OblamaLlama`.
+- Downloads are resumable and can be paused, resumed, cancelled, or imported from device storage.
+- The app uses the same persisted store for model selection, conversation settings, themes, and onboarding.
 
 ## Product
 
-_Describe the high-level user-facing capabilities of this app once they exist._
-
-## User preferences
-
-_Populate as you build — explicit user instructions worth remembering across sessions._
+- Private local chat with streaming responses, personas, system prompts, export, copy, and regenerate actions.
+- Curated GGUF/ONNX model library with device-memory checks and Hugging Face search.
+- Offline-first conversation history and appearance settings.
+- Image-model catalog support ready for the native generation engine.
 
 ## Gotchas
 
-_Populate as you build — sharp edges, "always run X before Y" rules._
+- Do not treat a web preview error about the native llama module as a UI failure; the native bridge is intentionally absent from Expo Go.
+- Keep Expo package versions aligned with SDK 54 (`pnpm dlx expo-doctor@latest` is the compatibility check).
+- Do not commit `android/`, `ios/`, model files, static builds, or local secrets.
 
 ## Pointers
 
-- See the `pnpm-workspace` skill for workspace structure, TypeScript setup, and package details
+- Android APK automation lives in `.github/workflows/android-apk.yml`.
+- Public project documentation lives in `README.md`, `CONTRIBUTING.md`, `CHANGELOG.md`, and `LICENSE`.
