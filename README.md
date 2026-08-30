@@ -17,11 +17,11 @@ Oblama is an Expo/React Native mobile app for discovering, downloading, and chat
 
 ## Latest release
 
-**Oblama v1.0.1** is the current Android release.
+**Oblama v1.0.2** is the current Android release.
 
-- Android version code: `2`
+- Android version code: `3`
 - Release channel: unsigned debug APK for sideloading and testing
-- Release notes: [v1.0.1](https://github.com/codewithmukeem/oblama/releases/tag/v1.0.1)
+- Release notes: [v1.0.2](https://github.com/codewithmukeem/oblama/releases/tag/v1.0.2)
 
 [**Download Latest APK**](https://github.com/codewithmukeem/oblama/releases/latest/download/Oblama.apk)
 

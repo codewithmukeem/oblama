@@ -18,6 +18,11 @@ All notable changes to Oblama are documented here.
 - Onboarding waits for the root navigation state before replacing the route.
 - Root workspace builds no longer require workflow-only Vite environment variables.
 
+## [1.0.2] - 2026-08-30
+
+- Replaced the deprecated Node 20 GitHub Release action with the GitHub CLI.
+- Made release publishing safe to retry without creating duplicate assets.
+
 ## [1.0.1] - 2026-08-30
 
 - Published the Android debug APK as a GitHub Release asset with a stable latest-download URL.

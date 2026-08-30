@@ -81,19 +81,35 @@ jobs:
 
       - name: Publish GitHub Release
         if: startsWith(github.ref, 'refs/tags/v')
-        uses: softprops/action-gh-release@v2
-        with:
-          name: Oblama v${{ steps.release.outputs.version }}
-          tag_name: ${{ github.ref_name }}
-          body: |
-            ## Oblama v${{ steps.release.outputs.version }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          release_notes="$(cat <<'EOF'
+          ## Oblama v${{ steps.release.outputs.version }}
 
-            Private, local AI chat for Android.
+          Private, local AI chat for Android.
 
-            - Android version code: `${{ steps.release.outputs.version_code }}`
-            - Package: `com.codewithmukeem.oblama`
-            - Build: unsigned debug APK for sideloading and testing
+          - Android version code: `${{ steps.release.outputs.version_code }}`
+          - Package: `com.codewithmukeem.oblama`
+          - Build: unsigned debug APK for sideloading and testing
 
-            Download `Oblama.apk` below for the stable direct-download URL.
-          files: dist/Oblama.apk
-          generate_release_notes: true
+          Download `Oblama.apk` below for the stable direct-download URL.
+          EOF
+          )"
+
+          if gh release view "${GITHUB_REF_NAME}" --repo "${GITHUB_REPOSITORY}" >/dev/null 2>&1; then
+            gh release upload "${GITHUB_REF_NAME}" dist/Oblama.apk \
+              --repo "${GITHUB_REPOSITORY}" \
+              --clobber
+            gh release edit "${GITHUB_REF_NAME}" \
+              --repo "${GITHUB_REPOSITORY}" \
+              --title "Oblama v${{ steps.release.outputs.version }}" \
+              --notes "$release_notes"
+          else
+            gh release create "${GITHUB_REF_NAME}" dist/Oblama.apk \
+              --repo "${GITHUB_REPOSITORY}" \
+              --title "Oblama v${{ steps.release.outputs.version }}" \
+              --notes "$release_notes" \
+              --generate-notes \
+              --verify-tag
+          fi
