@@ -47,6 +47,7 @@ Thumbs.db
 # Replit
 .cache/
 .local/
+.agents/
 
 # generated Expo/static output and local conversation metadata
 artifacts/*/static-build/
