@@ -15,6 +15,18 @@ Oblama is an Expo/React Native mobile app for discovering, downloading, and chat
 - Conversation export, offline persistence, light/dark appearance, and device capability checks
 - GitHub Actions workflow that generates a downloadable Android preview APK
 
+## Latest release
+
+**Oblama v1.0.1** is the current Android release.
+
+- Android version code: `2`
+- Release channel: unsigned debug APK for sideloading and testing
+- Release notes: [v1.0.1](https://github.com/codewithmukeem/oblama/releases/tag/v1.0.1)
+
+[**Download Latest APK**](https://github.com/codewithmukeem/oblama/releases/latest/download/Oblama.apk)
+
+The button above always points to `Oblama.apk` on the latest published GitHub Release. It is the recommended public download; Actions artifacts are retained only for development and CI inspection.
+
 ## Preview the app
 
 This repository is a pnpm workspace. From the repository root:
@@ -31,11 +43,11 @@ pnpm --filter @workspace/oblama run typecheck
 pnpm dlx expo-doctor@latest --dir artifacts/oblama
 ```
 
-## Android APK
+## Android APK and releases
 
-Every push to `main` and every `v*` tag can build an Android preview APK through [GitHub Actions](.github/workflows/android-apk.yml). The APK is uploaded to the workflow run; version tags also create a GitHub Release containing the file.
+Every push to `main` builds an Android preview APK through [GitHub Actions](.github/workflows/android-apk.yml) and keeps a versioned CI artifact for development. Pushing a `v*` tag performs the same build and, only after a successful build, publishes `Oblama.apk` as a GitHub Release asset.
 
-The workflow uses Expo prebuild and Gradle in GitHub-hosted infrastructure. It creates an unsigned debug APK suitable for sideloading and testing. A production release should be signed with an organization-owned Android keystore before distribution.
+The workflow uses Expo prebuild and Gradle in GitHub-hosted infrastructure. Release tags provide the stable public download above. The APK is unsigned and suitable for sideloading and testing; a production release should be signed with an organization-owned Android keystore before distribution.
 
 To build locally on a machine with Java and Android SDK installed:
 
